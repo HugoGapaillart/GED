@@ -1,0 +1,109 @@
+import { StyleSheet } from "react-native";
+
+export const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#f5f5f5",
+    padding: 20,
+    justifyContent: "center",
+  },
+  title: {
+    fontSize: 32,
+    fontWeight: "bold",
+    marginBottom: 30,
+    color: "#333",
+    textAlign: "center",
+  },
+  label: {
+    fontSize: 16,
+    marginBottom: 8,
+    color: "#555",
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: "#ccc",
+    backgroundColor: "#fff",
+    padding: 12,
+    borderRadius: 8,
+    marginBottom: 20,
+    color: "#333",
+  },
+  button: {
+    backgroundColor: "#007bff",
+    padding: 15,
+    borderRadius: 8,
+    alignItems: "center",
+    marginBottom: 20,
+  },
+  deleteButton: {
+    backgroundColor: "red",
+  },
+  buttonText: {
+    color: "#fff",
+    fontWeight: "bold",
+    fontSize: 16,
+  },
+  switchText: {
+    textAlign: "center",
+    color: "#007bff",
+    fontSize: 14,
+  },
+  documentContainer: {
+    padding: 12,
+    borderWidth: 1,
+    marginBottom: 20,
+    borderRadius: 8,
+  },
+  documentTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#0f0f0fff",
+    marginBottom: 8,
+  },
+  description: {
+    fontSize: 14,
+    marginBottom: 8,
+    color: "#555",
+  },
+  categoryText: {
+    backgroundColor: "#007bff",
+    color: "#fff",
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 8,
+    marginRight: 4,
+    fontSize: 16,
+  },
+  filterCategory:{
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    borderWidth: 1,
+    borderRadius: 20,
+    marginRight: 8,
+  },
+  addButton:{
+    position: "absolute",
+    bottom: 20,
+    right: 20,
+    backgroundColor: "#007bff",
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    justifyContent: "center",
+    alignItems: "center",
+    elevation: 5,
+  },
+  searchBar:{
+    borderWidth: 1,
+    padding: 10,
+    borderRadius: 8,
+    marginBottom: 12,
+  },
+  detailTitle:{
+    fontSize: 24,
+    fontWeight: "bold",
+    marginBottom: 12,
+    textAlign: "center",
+  },
+  
+});

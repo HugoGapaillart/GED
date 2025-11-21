@@ -141,14 +141,26 @@ export default function EditDocumentScreen({ params, navigate }: any) {
 
   async function handleDelete() {
     try {
+      if (document.file_url) {
+        try {
+          await deleteFile(document.file_url);
+        } catch (e: any) {
+          console.warn(
+            "Impossible de supprimer le fichier associé :",
+            e.message
+          );
+        }
+      }
+
       const { error } = await supabase
         .from("documents")
         .delete()
-        .eq("id", document.id);
+        .eq("id", document.id)
+        .eq("user_id", document.user_id);
 
       if (error) throw error;
 
-      Alert.alert("Supprimé", "Document supprimé !");
+      Alert.alert("Supprimé", "Document et fichier associés supprimés !");
       navigate("List");
     } catch (err: any) {
       Alert.alert("Erreur", err.message);
@@ -271,7 +283,20 @@ export default function EditDocumentScreen({ params, navigate }: any) {
 
       <TouchableOpacity
         style={[styles.button, styles.deleteButton]}
-        onPress={handleDelete}
+        onPress={() => {
+          Alert.alert(
+            "Confirmer la suppression",
+            "Es-tu sûr de vouloir supprimer ce document ? Cette action est irréversible.",
+            [
+              { text: "Annuler", style: "cancel" },
+              {
+                text: "Supprimer",
+                style: "destructive",
+                onPress: handleDelete,
+              },
+            ]
+          );
+        }}
       >
         <Text style={styles.buttonText}>Supprimer</Text>
       </TouchableOpacity>

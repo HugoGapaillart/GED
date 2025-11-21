@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, Alert } from "react-native";
 import { signUp } from "../../services/authService.ts";
 import { styles } from "../../styles.ts";

@@ -5,6 +5,7 @@ import {
   FlatList,
   TouchableOpacity,
   ActivityIndicator,
+  RefreshControl,
 } from "react-native";
 import { supabase } from "../../services/supabase.ts";
 import DocumentCard from "../../components/DocumentCard.tsx";
@@ -31,6 +32,13 @@ export default function ListDocumentsScreen({ navigate }: Props) {
   const [documents, setDocuments] = useState<Document[]>([]);
   const [filtered, setFiltered] = useState<Document[]>([]);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+
+  async function onRefresh() {
+    setRefreshing(true);
+    await fetchDocuments(); // ta fonction qui recharge les documents
+    setRefreshing(false);
+  }
 
   useEffect(() => {
     fetchDocuments();
@@ -55,12 +63,18 @@ export default function ListDocumentsScreen({ navigate }: Props) {
     <View style={{ flex: 1, paddingTop: 16, paddingHorizontal: 16 }}>
       <FilterDocument documents={documents} onFilter={setFiltered} />
 
-      <FlatList
+      <FlatList<Document>
         data={filtered}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
           <DocumentCard document={item} navigate={navigate} />
         )}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+        scrollEnabled={true}
+        alwaysBounceVertical={true}
+        contentContainerStyle={{ flexGrow: 1 }}
       />
 
       <TouchableOpacity

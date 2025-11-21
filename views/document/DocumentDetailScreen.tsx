@@ -5,6 +5,7 @@ import {
   Linking,
   ScrollView,
   TouchableOpacity,
+  Image,
 } from "react-native";
 import { supabase } from "../../services/supabase.ts";
 import { styles } from "../../styles.ts";
@@ -32,6 +33,10 @@ export default function DocumentDetailScreen({ params, navigate }: any) {
 
   const canEdit = userId === document.user_id;
 
+  const fileUrl = supabase.storage
+    .from("gedBucket")
+    .getPublicUrl(document.file_url).data.publicUrl;
+
   return (
     <ScrollView contentContainerStyle={{ padding: 16, marginTop: 16 }}>
       <TouchableOpacity
@@ -45,30 +50,36 @@ export default function DocumentDetailScreen({ params, navigate }: any) {
         style={{ flexDirection: "row", flexWrap: "wrap", marginVertical: 5 }}
       >
         {document.categories.map((cat, idx) => (
-          <Text style={styles.categoryText} key={idx}>
+          <Text style={[styles.categoryText, { marginBottom: 8 }]} key={idx}>
             {cat}
           </Text>
         ))}
       </View>
-      <Text style={{ marginVertical: 8, fontSize: 16 }}>
-        {document.description}
+      <Text style={styles.detailText}>{document.description}</Text>
+      <Text style={styles.detailText}>
+        Mots-clés: {document.keywords.join(", ")}
       </Text>
-      <Text>Mots-clés: {document.keywords.join(", ")}</Text>
-      <Text>
-        Date création: {new Date(document.created_at).toLocaleDateString()}
+      <Text style={styles.detailText}>
+        Créé le: {new Date(document.created_at).toLocaleDateString()}
       </Text>
-      <Text>
-        Date modification: {new Date(document.updated_at).toLocaleDateString()}
+      <Text style={styles.detailText}>
+        Dernière modification le:{" "}
+        {new Date(document.updated_at).toLocaleDateString()}
       </Text>
+
+      <Image
+        source={{ uri: fileUrl }}
+        style={{
+          width: "100%",
+          height: 200,
+          borderRadius: 10,
+          marginVertical: 16,
+        }}
+      />
 
       <TouchableOpacity
         style={styles.button}
-        onPress={() =>
-          Linking.openURL(
-            supabase.storage.from("gedBucket").getPublicUrl(document.file_url)
-              .data.publicUrl
-          )
-        }
+        onPress={() => Linking.openURL(fileUrl)}
       >
         <Text style={styles.buttonText}>Ouvrir le fichier</Text>
       </TouchableOpacity>

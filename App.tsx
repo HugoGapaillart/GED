@@ -1,76 +1,66 @@
 import { useEffect, useState } from "react";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
-import { Tab, TabView } from "@rneui/themed";
-import { supabase } from "./services/supabase.ts";
-import ProfileScreen from "./views/profile/ProfileScreen.tsx";
-import { Ionicons } from "@expo/vector-icons";
+import { PaperProvider, BottomNavigation } from "react-native-paper";
+import { supabase } from "./services/supabase";
 
-import LoginScreen from "./views/auth/Login.tsx";
-import RegisterScreen from "./views/auth/Register.tsx";
-import AppNavigator from "./routes/AppNavigator.tsx";
+import AppNavigator from "./routes/AppNavigator";
+import ProfileScreen from "./views/profile/ProfileScreen";
+
+import LoginScreen from "./views/auth/Login";
+import RegisterScreen from "./views/auth/Register";
+
+import type { Session } from "@supabase/supabase-js";
+import { styles } from "./styles";
 
 export default function App() {
-  const [session, setSession] = useState<any | null>(null);
+  const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
   const [index, setIndex] = useState(0);
 
+  const routes = [
+    { key: "home", title: "Home", focusedIcon: "file-document-outline" },
+    { key: "profile", title: "Profil", focusedIcon: "account" },
+  ];
+
   useEffect(() => {
+    // Récupère la session actuelle
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       setLoading(false);
     });
 
-    const { data: listener } = supabase.auth.onAuthStateChange(
-      (_event, session) => setSession(session)
-    );
+    // Écoute les changements d'auth
+    supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+    });
 
-    return () => listener.subscription.unsubscribe();
+    // Pas besoin de cleanup
   }, []);
 
   if (loading) return null;
 
-  if (!session) return <AuthWrapper onLogged={() => setSession(true)} />;
+  if (!session)
+    return <AuthWrapper onLogged={() => setSession({} as Session)} />;
+
+  const renderScene = BottomNavigation.SceneMap({
+    home: AppNavigator,
+    profile: ProfileScreen,
+  });
 
   return (
-    <SafeAreaProvider>
-      <SafeAreaView style={{ flex: 1, backgroundColor: "#000000ff" }}>
-        <TabView
-          value={index}
-          onChange={setIndex}
-          animationType="spring"
-          disableSwipe
-        >
-          <TabView.Item style={{ flex: 1, backgroundColor: "#ffffffff" }}>
-            <AppNavigator />
-          </TabView.Item>
-
-          <TabView.Item style={{ flex: 1, backgroundColor: "#ffffffff" }}>
-            <ProfileScreen />
-          </TabView.Item>
-        </TabView>
-
-        <Tab
-          value={index}
-          onChange={setIndex}
-          indicatorStyle={{
-            backgroundColor: "white",
-            height: 3,
-          }}
-          variant="primary"
-        >
-          <Tab.Item
-            title="Document"
-            titleStyle={{ fontSize: 12 }}
-            icon={<Ionicons name="document-outline" size={20} color="white" />}
+    <PaperProvider>
+      <SafeAreaProvider>
+        <SafeAreaView style={styles.base}>
+          <BottomNavigation
+            navigationState={{ index, routes }}
+            onIndexChange={setIndex}
+            renderScene={renderScene}
+            shifting={true}
+            barStyle={{ height: "10%" }}
           />
-          <Tab.Item
-            title="Profile"
-            titleStyle={{ fontSize: 12 }}
-            icon={<Ionicons name="person-outline" size={20} color="white" />}
-          />
-        </Tab>
-      </SafeAreaView>
-    </SafeAreaProvider>
+        </SafeAreaView>
+      </SafeAreaProvider>
+    </PaperProvider>
   );
 }
 

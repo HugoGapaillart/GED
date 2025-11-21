@@ -1,6 +1,9 @@
 import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
+  base: {
+    flex: 1,
+  },
   container: {
     flex: 1,
     backgroundColor: "#f5f5f5",
@@ -105,5 +108,39 @@ export const styles = StyleSheet.create({
     marginBottom: 12,
     textAlign: "center",
   },
-  
+  detailText:{
+    fontSize: 16,
+    marginBottom: 8,
+  },
+  zone:{
+    padding: 16,
+    backgroundColor: "#eee",
+    borderRadius: 10,
+    marginBottom: 12,
+  },
+  profilTitle:{
+    fontSize: 26,
+    fontWeight: "bold",
+    marginBottom: 20,
+    textAlign: "center",
+  },
+  popupBackground:{
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0,0,0,0.4)",
+  },
+  popupContainer:{
+    width: "85%",
+    backgroundColor: "white",
+    padding: 20,
+    borderRadius: 10,
+  },
+  popupInput:{
+    borderWidth: 1,
+    borderColor: "#ccc",
+    padding: 10,
+    borderRadius: 8,
+    marginBottom: 20,
+  }
 });

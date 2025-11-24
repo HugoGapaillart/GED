@@ -81,7 +81,7 @@ export default function ListDocumentsScreen({ navigate }: Props) {
         onPress={() => navigate("Add")}
         style={styles.addButton}
       >
-        <Text style={{ color: "white", fontSize: 32 }}>+</Text>
+        <Text style={{ color: "white", fontSize: 32, lineHeight: 32 }}>+</Text>
       </TouchableOpacity>
     </View>
   );

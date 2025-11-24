@@ -1,12 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  ScrollView,
-} from "react-native";
-import { styles } from "../styles.ts";
+import { View, Text, ScrollView } from "react-native";
+import { Searchbar, Chip } from "react-native-paper";
 
 type Props = {
   documents: any[];
@@ -54,11 +48,10 @@ export default function FiltreDocument({ documents, onFilter }: Props) {
 
   return (
     <View style={{ marginBottom: 20 }}>
-      <TextInput
-        placeholder="Rechercher un document..."
-        value={search}
+      <Searchbar
+        placeholder="Rechercher"
         onChangeText={setSearch}
-        style={styles.searchBar}
+        value={search}
       />
 
       <Text style={{ fontWeight: "bold", marginBottom: 8, marginTop: 10 }}>
@@ -68,22 +61,18 @@ export default function FiltreDocument({ documents, onFilter }: Props) {
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
         {allCategories.map((cat) => {
           const isSelected = selectedCategories.includes(cat);
+
           return (
-            <TouchableOpacity
+            <Chip
               key={cat}
+              selected={isSelected}
               onPress={() => toggleCategory(cat)}
-              style={[
-                styles.filterCategory,
-                {
-                  borderColor: isSelected ? "#007bff" : "#ccc",
-                  backgroundColor: isSelected ? "#007bff" : "#f2f2f2",
-                },
-              ]}
+              style={{ marginRight: 8 }}
+              selectedColor="black"
+              mode={isSelected ? "flat" : "outlined"}
             >
-              <Text style={{ color: isSelected ? "white" : "black" }}>
-                {cat}
-              </Text>
-            </TouchableOpacity>
+              {cat}
+            </Chip>
           );
         })}
       </ScrollView>
